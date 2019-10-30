@@ -1,2 +1,37 @@
-# Transceiver-transmits-signal-to-transceiver-in-receive-mode-transceiver-switches-to-transmit
-A transceiver(1) that is activated by a touch sensor, transmits a message(1) to another transceiver(2) This transceiver(2) receives the message sent by transceiver (1) if this message corresponds with the touch sensor being activated, then Transceiver(2) switches to transmit mode, Transceiver(2) then transmits a message with a completely different address, and message (2) is sent to Transceiver (3) If the reed switch(1) on Transceiver (2) is activated then Message (2) is sent to Transceiver (3) indicating reed switch is on. When Transceiver(3) receives Message(2), then it orders actuators to activate. one of such actuators (1) retracts with a magnet attached to it, this magnet comes into contact with reed switch(1), deactivating it, when this happens, Message(3) is sent to transceiver (3), telling it to do nothing to actuators. When magnet is separated from reed switch (1), Message(2) is sent to transceiver (3) again indicating reed switch(1) is activated, telling transceiver (3) to reactivate actuators.
+// Transmitter mode transceiver
+# include <SPI.h>
+# include <nRF24L01.h>
+# include <RF24.h>
+int SentMessage[1] = {000};
+RF24 radio(4, 10); // CE , CS
+const byte address[6] = "00001";
+int sensor_pin = D2;
+
+boolean sensor_state = 0;
+boolean sensor_state1 = 0;
+int led_pin = D3;
+
+void setup() void {
+  pinMode(sensor_pin, INPUT);
+  pinMode(led_pin, OUTPUT);
+  radio.begin();
+  radio.openWritingPipe(address[0]);
+  radio.setPALevel(RF24_PA_MIN);
+  radio.stopListening();
+}
+
+void loop()
+{
+  sensor_state = digitalRead(sensor_pin);
+  if(sensor_state == HIGH)
+  SentMessage[0] = 111;
+ {
+    digitalWrite(led_pin, HIGH);
+    radio.write(SentMessage, 1);
+ }
+ else
+ {
+   digitalWrite(led_pin, LOW);
+   radio.write(SentMessage, 0)
+   }
+ }
