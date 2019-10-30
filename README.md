@@ -28,9 +28,14 @@ void loop()
   {
     radio.read(&sensor_state, sizeof(sensor_state));
     radio.read(&reed_state, sizeof(reed_state));
+    reed_state = digitalRead(reed_pin)
     if(sensor_state == HIGH)
     if(reed_state == HIGH)
   {
      radio.stopListening();
      radio.write(&sensor_state, sizeof(sensor_state));
      radio.write(&reed_state, sizeof(reed_state));
+   }
+ }
+}
+    
