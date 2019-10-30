@@ -2,36 +2,35 @@
 # include <SPI.h>
 # include <nRF24L01.h>
 # include <RF24.h>
-int SentMessage[1] = {000};
-RF24 radio(4, 10); // CE , CS
-const byte address[6] = "00001";
-int sensor_pin = D2;
+RF24 radio(2, 10); // CE , CS
+const byte addresses [][6] = {"00001", "00002"};
+int sensor_pin = 2;
 
+int reed_pin = 3;
 boolean sensor_state = 0;
-boolean sensor_state1 = 0;
-int led_pin = D3;
+boolean sensor_state1 = 0:
+boolean reed_state = 0;
+boolean reed_state1 =0;
 
-void setup() void {
-  pinMode(sensor_pin, INPUT);
-  pinMode(led_pin, OUTPUT);
+void setup()  {
+  pinMode(reed_pin, input);
+  Serial.begin(9600);
   radio.begin();
-  radio.openWritingPipe(address[0]);
+  radio.OpenReadingPipe(1, addresses[1]);
+  radio.OpenWritingPipe(addresses[0]);
   radio.setPALevel(RF24_PA_MIN);
-  radio.stopListening();
 }
-
 void loop()
 {
-  sensor_state = digitalRead(sensor_pin);
-  if(sensor_state == HIGH)
-  SentMessage[0] = 111;
- {
-    digitalWrite(led_pin, HIGH);
-    radio.write(SentMessage, 1);
- }
- else
- {
-   digitalWrite(led_pin, LOW);
-   radio.write(SentMessage, 0)
-   }
- }
+  delay(5)
+  radio.startListening();
+  if (radio.available());
+  {
+    radio.read(&sensor_state, sizeof(sensor_state));
+    radio.read(&reed_state, sizeof(reed_state));
+    if(sensor_state == HIGH)
+    if(reed_state == HIGH)
+  {
+     radio.stopListening();
+     radio.write(&sensor_state, sizeof(sensor_state));
+     radio.write(&reed_state, sizeof(reed_state));
