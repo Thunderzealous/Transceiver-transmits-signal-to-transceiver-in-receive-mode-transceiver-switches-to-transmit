@@ -2,7 +2,6 @@
 # include <SPI.h>
 # include <nRF24L01.h>
 # include <RF24.h>
-int SentMessage[1] = {000};
 RF24 radio(4, 10); // CE , CS
 const byte address[6] = "00001";
 int sensor_pin = D2;
@@ -32,6 +31,5 @@ void loop()
  else
  {
    digitalWrite(led_pin, LOW);
-   radio.write(SentMessage, 0)
    }
  }
